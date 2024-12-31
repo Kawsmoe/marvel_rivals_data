@@ -1,15 +1,10 @@
 # This is an R script used to scrape the data from the rivals.gg API for Marvels Rivals Data.
 # This data includes player data as well as match data.
 
-
 library(tidyverse)
 library(jsonlite)
-library(rvest)
 library(RSelenium)
 library(netstat)
-library(XML)
-library(lubridate)
-library(wdman)
 
 # URL for website API (Using my User Name "Kawsmoe")
 url = "https://api.tracker.gg/api/v2/marvel-rivals/standard/profile/ign/Kawsmoe"
