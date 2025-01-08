@@ -13,7 +13,6 @@ url = "https://api.tracker.gg/api/v2/marvel-rivals/standard/profile/ign/Kawsmoe"
 rs_driver_object = rsDriver(
   browser = "firefox",
   verbose = F,
-  extraCapabilities = eCaps,
   port = free_port()
 )
 # Creating the client
@@ -129,6 +128,9 @@ cat(substr(cur_matches_data_clean, 1, 100))  # Inspect the first 100 characters
 # Parse the JSON data
 cur_matches_json = fromJSON(cur_matches_data_clean)
 
+#Creating a variable to navigate to Segments part of JSON
+segments = cur_matches_json$data$matches$segments
+
 #Creating values from the Parsed JSON
 match_id = cur_matches_json$data$matches$attributes$id
 mode = cur_matches_json$data$matches$attributes$mode
@@ -136,23 +138,27 @@ map_name = cur_matches_json$data$matches$metadata$mapName
 mode_name = cur_matches_json$data$matches$metadata$mapModeName
 timestamp = cur_matches_json$data$matches$metadata$timestamp
 duration = cur_matches_json$data$matches$metadata$duration
-team_id = cur_matches_json$data$matches$segments[[1]]$metadata$teamId
-player_result = cur_matches_json$data$matches$segments[[1]]$metadata$outcome$result
-team_result = cur_matches_json$data$matches$segments[[1]]$metadata$result
-is_mvp = cur_matches_json$data$matches$segments[[1]]$metadata$isMvp
-is_svp = cur_matches_json$data$matches$segments[[1]]$metadata$isSvp
+team_id = sapply(segments, function(segment) segment$metadata$teamId)
+player_result = sapply(segments, function(segment) segment$metadata$outcome$result)
+team_result = sapply(segments, function(segment) segment$metadata$result)
+is_mvp = sapply(segments, function(segment) segment$metadata$isMvp)
+is_svp = sapply(segments, function(segment) segment$metadata$isSvp)
 map_image_url = cur_matches_json$data$matches$metadata$mapImageUrl
-kills = cur_matches_json$data$matches$segments[[1]]$stats$kills$value
-deaths = cur_matches_json$data$matches$segments[[1]]$stats$deaths$value
-assists = cur_matches_json$data$matches$segments[[1]]$stats$assists$value
-head_kills = cur_matches_json$data$matches$segments[[1]]$stats$headKills$value
-last_kills = cur_matches_json$data$matches$segments[[1]]$stats$lastKills$value
-solo_kills = cur_matches_json$data$matches$segments[[1]]$stats$soloKills$value
-total_damage_dealt = cur_matches_json$data$matches$segments[[1]]$stats$totalDamageDealt$value
-total_damage_taken = cur_matches_json$data$matches$segments[[1]]$stats$totalDamageTaken$value
-total_hero_heal = cur_matches_json$data$matches$segments[[1]]$stats$totalHeal$value
-main_attacks = cur_matches_json$data$matches$segments[[1]]$stats$mainAttacks$value
-main_attacks_hit = cur_matches_json$data$matches$segments[[1]]$stats$mainAttacksHit$value
+kills = sapply(segments, function(segment) segment$stats$kills$value)
+deaths = sapply(segments, function(segment) segment$stats$deaths$value)
+assists = sapply(segments, function(segment) segment$stats$assists$value)
+head_kills = sapply(segments, function(segment) segment$stats$headKills$value)
+last_kills = sapply(segments, function(segment) segment$stats$lastKills$value)
+solo_kills = sapply(segments, function(segment) segment$stats$soloKills$value)
+total_damage_dealt = sapply(segments, function(segment) segment$stats$totalDamageDealt$value)
+total_damage_taken = sapply(segments, function(segment) segment$stats$totalDamageTaken$value)
+total_hero_heal = sapply(segments, function(segment) segment$stats$totalHeal$value)
+main_attacks = sapply(segments, function(segment) segment$stats$mainAttacks$value)
+main_attacks_hit = sapply(segments, function(segment) segment$stats$mainAttacksHit$value)
+shields_hit = sapply(segments, function(segment) segment$stats$shieldsHit$value)
+summoners_hit = sapply(segments, function(segment) segment$stats$summonersHit$value)
+chaoses_hit = sapply(segments, function(segment) segment$stats$chaosesHit$value)
+hit_rate = sapply(segments, function(segment) segment$stats$hitRate$value)
 
 
 #Creating the data frame
@@ -204,18 +210,33 @@ while (TRUE) {
   }
   
   # Extract information from the JSON data
-  match_id = matches_json$data$matches$attributes$id
+match_id = matches_json$data$matches$attributes$id
   mode = matches_json$data$matches$attributes$mode
   map_name = matches_json$data$matches$metadata$mapName
   mode_name = matches_json$data$matches$metadata$mapModeName
   timestamp = matches_json$data$matches$metadata$timestamp
   duration = matches_json$data$matches$metadata$duration
-  team_id = matches_json$data$matches$segments[[1]]$metadata$teamId
-  player_result = matches_json$data$matches$segments[[1]]$metadata$outcome$result
-  team_result = matches_json$data$matches$segments[[1]]$metadata$result
-  is_mvp = matches_json$data$matches$segments[[1]]$metadata$isMvp
-  is_svp = matches_json$data$matches$segments[[1]]$metadata$isSvp
+  team_id = sapply(segments, function(segment) segment$metadata$teamId)
+  player_result = sapply(segments, function(segment) segment$metadata$outcome$result)
+  team_result = sapply(segments, function(segment) segment$metadata$result)
+  is_mvp = sapply(segments, function(segment) segment$metadata$isMvp)
+  is_svp = sapply(segments, function(segment) segment$metadata$isSvp)
   map_image_url = matches_json$data$matches$metadata$mapImageUrl
+  kills = sapply(segments, function(segment) segment$stats$kills$value)
+  deaths = sapply(segments, function(segment) segment$stats$deaths$value)
+  assists = sapply(segments, function(segment) segment$stats$assists$value)
+  head_kills = sapply(segments, function(segment) segment$stats$headKills$value)
+  last_kills = sapply(segments, function(segment) segment$stats$lastKills$value)
+  solo_kills = sapply(segments, function(segment) segment$stats$soloKills$value)
+  total_damage_dealt = sapply(segments, function(segment) segment$stats$totalDamageDealt$value)
+  total_damage_taken = sapply(segments, function(segment) segment$stats$totalDamageTaken$value)
+  total_hero_heal = sapply(segments, function(segment) segment$stats$totalHeal$value)
+  main_attacks = sapply(segments, function(segment) segment$stats$mainAttacks$value)
+  main_attacks_hit = sapply(segments, function(segment) segment$stats$mainAttacksHit$value)
+  shields_hit = sapply(segments, function(segment) segment$stats$shieldsHit$value)
+  summoners_hit = sapply(segments, function(segment) segment$stats$summonersHit$value)
+  chaoses_hit = sapply(segments, function(segment) segment$stats$chaosesHit$value)
+  hit_rate = sapply(segments, function(segment) segment$stats$hitRate$value)
   
   
   # Create a data frame for the current page of results
