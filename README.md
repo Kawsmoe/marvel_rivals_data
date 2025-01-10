@@ -1,6 +1,6 @@
 # Marvel Rivals Web Scraper
 
-This is a R based program that will collect player and match data from tracker.gg's Marvel Rivals API.
+This is a R based program that will collect player data from tracker.gg's Marvel Rivals API. Match Data to come soon.
 
 # How it works
 
